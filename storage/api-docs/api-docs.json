@@ -1,0 +1,135 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Dental Price Comparison API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/price-comparison": {
+            "post": {
+                "tags": [
+                    "Price Comparison"
+                ],
+                "summary": "Find the cheapest supplier for a list of products",
+                "operationId": "f66ca3f9081ac0c6bf3ee239449e26ed",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PriceComparisonRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful comparison",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "supplier": {
+                                            "type": "string",
+                                            "example": "Supplier B"
+                                        },
+                                        "total_price": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 102
+                                        },
+                                        "breakdown": {
+                                            "type": "object",
+                                            "example": {
+                                                "Dental Floss": [
+                                                    {
+                                                        "packages_count": 5,
+                                                        "package_size": 1,
+                                                        "package_price": 8
+                                                    }
+                                                ],
+                                                "Ibuprofen": [
+                                                    {
+                                                        "packages_count": 2,
+                                                        "package_size": 5,
+                                                        "package_price": 25
+                                                    },
+                                                    {
+                                                        "packages_count": 2,
+                                                        "package_size": 1,
+                                                        "package_price": 6
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No supplier can fulfill the order",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No supplier could be found to fulfill the entire order."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "PriceComparisonRequest": {
+                "title": "Price Comparison Request",
+                "required": [
+                    "items"
+                ],
+                "properties": {
+                    "items": {
+                        "description": "An array of items to be priced.",
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "product_name",
+                                "quantity"
+                            ],
+                            "properties": {
+                                "product_name": {
+                                    "type": "string",
+                                    "example": "Dental Floss"
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "example": 5
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Price Comparison",
+            "description": "Price Comparison"
+        }
+    ]
+}
